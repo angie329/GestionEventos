@@ -59,8 +59,18 @@ class EventoController extends Controller
             'data' => $evento
         ], 200);
     }
-    public function inscritos($id){
-        $inscritos = Evento::find($id);
+    public function inscritos($id) {
+        $evento = Evento::find($id);
+
+        if (!$evento) {
+            return response()->json(['message' => 'Evento no encontrado'], 404);
+        }
+        $usuarios = \App\Models\User::join('inscripcions', 'users.id', '=', 'inscripcions.user_id')
+                    ->where('inscripcions.evento_id', $id)
+                    ->select('users.id', 'users.name', 'users.email', 'inscripcions.created_at as fecha_inscripcion')
+                    ->get();
+
+        return $usuarios;
     }
 
 }
