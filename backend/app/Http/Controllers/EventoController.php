@@ -46,4 +46,21 @@ class EventoController extends Controller
             'data' => $inscripcion
         ], 201);
     }
+    public function edit(Request $request, $id) {
+        $evento = Evento::find($id);
+
+        if (!$evento) {
+            return response()->json(['message' => 'Evento no encontrado'], 404);
+        }
+        $evento->update($request->all());
+
+        return response()->json([
+            'message' => 'Evento actualizado correctamente',
+            'data' => $evento
+        ], 200);
+    }
+    public function inscritos($id){
+        $inscritos = Evento::find($id);
+    }
+
 }

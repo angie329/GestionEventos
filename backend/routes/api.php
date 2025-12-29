@@ -12,3 +12,5 @@ Route::get('/eventos', [EventoController::class, 'index']);
 Route::post('/eventos', [EventoController::class, 'store']);
 Route::get('/eventos/{id}', [EventoController::class, 'show']);
 Route::post('/eventos/{id}/inscribir', [EventoController::class, 'inscribir']);
+Route::put('/eventos/{id}',[EventoController::class,'edit']);
+Route::get('/eventos/{id}/inscritos', [EventoController::class,'inscritos']);

@@ -70,6 +70,12 @@ POST /api/eventos
 Listar eventos
 GET /api/eventos
 
+Listar inscritos de eventos
+GET /api/eventos/{id}/inscritos
+
+Editar evento
+PUT /api/eventos/{id}
+
 Los endpoints pueden ser probados utilizando Postman.
 
 --------------------------------------------------
