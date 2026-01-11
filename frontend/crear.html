@@ -1,0 +1,123 @@
+<!-- Angie Alfonso -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Organizador | EventPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i> Event<span>Pro</span>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="eventos.html">Explorar</a></li>
+                <li><a href="crear.html" class="active">Organizar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Estructura tipo panel: información lateral + formulario -->
+        <div class="lista-eventos" style="grid-template-columns: 1fr 2fr; padding: 4rem 0;">
+
+            <!-- Sección informativa lateral -->
+            <aside>
+                <div style="position: sticky; top: 120px;">
+                    <span class="hero-tag">PANEL DE CONTROL</span>
+                    <h2>Publicar Evento</h2>
+
+                    <!-- Texto explicativo para el que cree un evento -->
+                    <p style="margin-bottom: 2rem;">
+                        Complete el formulario para que su evento sea visible en nuestra red oficial. 
+                        Una descripción detallada y una ubicación precisa ayudarán a mejorar la asistencia y el interés de los participantes
+                    </p>
+
+                    <!-- Indicador de estado maybe una decoración se puede quitar -->
+                    <div style="background: rgba(16, 185, 129, 0.1); color: var(--accent); padding: 10px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600;">
+                        <span style="height: 8px; width: 8px; background: var(--accent); border-radius: 50%;"></span>
+                        Registro habilitado
+                    </div>
+                </div>
+            </aside>
+
+            <section class="form-container">
+
+                <!-- Formulario para crear un nuevo evento -->
+                <form id="formEvento">
+
+                    <label for="titulo">Título del Evento</label>
+                    <input type="text" id="titulo" placeholder="Ej. Congreso IA" required>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div>
+                            <label for="fecha">Fecha</label>
+                            <input type="date" id="fecha" required>
+                        </div>
+                        <div>
+                            <label for="cupos">Cupos Máximos</label>
+                            <input type="number" id="cupos" min="1" required>
+                        </div>
+                    </div>
+
+                    <label for="ubicacion">Ubicación</label>
+                    <input type="text" id="ubicacion" required>
+
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" rows="5" required></textarea>
+
+                    <!-- Vista previa del evento -->
+                    <div style="background: rgba(255,255,255,0.03); border: 1px dashed var(--border); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                        <h4 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.2rem; text-transform: uppercase;">
+                            Vista Previa
+                        </h4>
+
+                        <div id="preview-card" style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border);">
+                            <div class="flex-between-start" style="margin-bottom: 0.5rem;">
+                                <span class="badge-academico">Académico</span>
+                            </div>
+
+                            <h5 id="p-titulo" style="color: white; margin-bottom: 0.5rem;">(Título)</h5>
+                            <p id="p-desc" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+                                (Descripción...)
+                            </p>
+
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="p-ubicacion">Ubicación</span>
+                            </div>
+
+                            <div class="info-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="p-fecha">Fecha</span>
+                            </div>
+
+                            <div class="info-item">
+                                <i class="fas fa-users"></i>
+                                <span id="p-cupos">0</span> Cupos
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnPublicar" class="btn-primary" style="width: 100%; justify-content: center;">
+                        Publicar evento
+                    </button>
+
+                    <!-- Mensaje de confirmación o error -->
+                    <p id="mensaje" style="margin-top: 1rem; text-align: center;"></p>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
