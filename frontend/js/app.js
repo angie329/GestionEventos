@@ -298,7 +298,6 @@ async function cargarInscritos(eventoId) {
         
         const inscritos = await res.json();
 
-        // Limpiar el loader
         contenedor.innerHTML = "";
 
         if (inscritos.length === 0) {
@@ -306,12 +305,10 @@ async function cargarInscritos(eventoId) {
             return;
         }
 
-        // Crear tarjeta por cada inscrito
         inscritos.forEach(usuario => {
             const card = document.createElement("div");
-            card.className = "inscrito-card"; // Clase para CSS
+            card.className = "inscrito-card";
             
-            // Asumiendo que la API devuelve { nombre, email, etc }
             card.innerHTML = `
                 <div class="inscrito-avatar">
                     <i class="fas fa-user-circle"></i>
