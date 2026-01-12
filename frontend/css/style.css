@@ -469,4 +469,26 @@ textarea:focus {
    Bryan Zhang - Fin
    ========================================================= */
 
-   
+/* =========================================================
+   Sergio Rodriguez - Estilos para Detalle de Evento
+   ========================================================= */
+#detalle-evento {
+    background-color: #ffffff; /* Aseguramos fondo blanco */
+    color: #334155;            /* Texto GRIS OSCURO para que se lea */
+    
+    /* Mantenemos el estilo de tarjeta */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Forzar color oscuro para los títulos dentro del detalle */
+#detalle-evento h1, 
+#detalle-evento h2, 
+#detalle-evento h3 {
+    color: #0f172a; 
+}
+
+/* Color específico para la fecha u otros textos pequeños */
+#detalle-evento span {
+    color: #475569;
+}

@@ -113,6 +113,7 @@ async function cargarEventos() {
             const card = document.createElement("div");
             card.className = "evento-card";
 
+            // Formatear la fecha para que se vea bonita
             const fechaFormateada = new Date(evento.fecha).toLocaleDateString(
                 "es-ES",
                 { day: "numeric", month: "long", year: "numeric" }
@@ -120,7 +121,7 @@ async function cargarEventos() {
 
             card.innerHTML = `
                 <div class="flex-between-start" style="margin-bottom: 1rem;">
-                    <span class="badge-academico">Académico</span>
+                    <span class="badge-academico">Evento</span>
                     <span class="id-badge">ID: #${evento.id}</span>
                 </div>
 
@@ -140,14 +141,20 @@ async function cargarEventos() {
                     <div class="info-item">
                         <i class="fas fa-users"></i> ${evento.cupos} Cupos
                     </div>
+
                     <div style="margin-top: 1.2rem; text-align: center; border-top: 1px dashed var(--border); padding-top: 1rem;">
-                        <a href="editar.html?id=${evento.id}" style="color: var(--accent); text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-edit"></i> Editar Evento
+                        <a href="detalle.html?id=${evento.id}" style="color: var(--accent); text-decoration: none; font-weight: bold; font-size: 1.1rem;">
+                            <i class="fas fa-eye"></i> Ver Detalle e Inscribirse
                         </a>
                     </div>
-                    <div style="margin-top: 1.2rem; text-align: center; border-top: 1px dashed var(--border); padding-top: 1rem;">
-                        <a href="inscritos.html?id=${evento.id}" style="color: var(--accent); text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-users"></i> Ver Inscritos
+
+                    <div style="margin-top: 1rem; text-align: center; border-top: 1px dashed var(--border); padding-top: 1rem; font-size: 0.9rem;">
+                        <a href="editar.html?id=${evento.id}" style="color: #666; text-decoration: none;">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <span style="margin: 0 10px;">|</span>
+                        <a href="inscritos.html?id=${evento.id}" style="color: #666; text-decoration: none;">
+                            <i class="fas fa-users"></i> Inscritos
                         </a>
                     </div>
                 </div>
@@ -157,15 +164,14 @@ async function cargarEventos() {
         });
 
     } catch (error) {
-        contenedorEventos.innerHTML =
-            "<p>Error al cargar los eventos.</p>";
+        console.error(error);
+        contenedorEventos.innerHTML = "<p>Error al cargar los eventos.</p>";
     }
 }
 
 if (contenedorEventos) {
     cargarEventos();
 }
-
 /* =========================================================
    Angie Alfonso - Fin
    ========================================================= */
@@ -346,3 +352,112 @@ if (btnAgregar) {
         alert("Funcionalidad en desarrollo: Aquí se abrirá el formulario de inscripción.");
     });
 }
+
+/* =========================================================
+   Sergio Rodriguez - Inicio
+   ========================================================= */
+
+/* =========================================================
+   Lógica para Detalle e Inscripción (Tu Parte)
+   ========================================================= */
+
+// 1. Detectar si estamos en la página de detalle
+const contenedorDetalle = document.getElementById("detalle-evento");
+
+if (contenedorDetalle) {
+    // Obtener el ID de la URL (ej: detalle.html?id=5)
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventoId = urlParams.get("id");
+
+    if (eventoId) {
+        cargarDetalleCompleto(eventoId);
+    } else {
+        document.getElementById("det-titulo").textContent = "Evento no especificado";
+    }
+
+    // Configurar botón de inscripción
+    const btnInscribir = document.getElementById("btn-inscribirse");
+    if (btnInscribir) {
+        btnInscribir.addEventListener("click", () => inscribirseEnEvento(eventoId));
+    }
+}
+
+// Función para cargar los datos del evento (GET)
+async function cargarDetalleCompleto(id) {
+    try {
+        const res = await fetch(`${API_BASE_URL}/eventos/${id}`);
+        if (!res.ok) throw new Error("No se pudo cargar el evento");
+
+        const evento = await res.json();
+
+        // Rellenar el HTML
+        document.getElementById("det-titulo").textContent = evento.titulo;
+        document.getElementById("det-descripcion").textContent = evento.descripcion;
+        document.getElementById("det-ubicacion").textContent = evento.ubicacion;
+        document.getElementById("det-cupos").textContent = evento.cupos;
+        
+        // Formatear fecha
+        const fecha = new Date(evento.fecha).toLocaleDateString("es-ES", {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+        document.getElementById("det-fecha").textContent = fecha;
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("det-titulo").textContent = "Error al cargar evento";
+    }
+}
+
+// Función para realizar la inscripción (POST)
+async function inscribirseEnEvento(id) {
+    const btn = document.getElementById("btn-inscribirse");
+    const mensaje = document.getElementById("mensaje-feedback");
+
+    // NOTA: Como no hay sistema de login visible, pedimos el ID manualmente
+    // En un sistema real, esto vendría de una variable de sesión o token.
+    const userId = prompt("Por favor, ingresa tu ID de usuario para inscribirte (ej: 1, 2...):");
+    
+    if (!userId) return; // Si cancela, no hacemos nada
+
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Procesando...`;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/eventos/${id}/inscribir`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: userId // Enviamos el ID que pide el controlador
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            mensaje.style.color = "green";
+            mensaje.innerHTML = `<i class="fas fa-check"></i> ${data.message || "¡Inscripción exitosa!"}`;
+            btn.style.display = "none"; // Ocultar botón tras éxito
+        } else {
+            // Manejar errores (ej: Cupos llenos o Usuario ya inscrito)
+            mensaje.style.color = "red";
+            mensaje.innerHTML = `<i class="fas fa-times"></i> ${data.message || "Error al inscribir"}`;
+        }
+
+    } catch (error) {
+        console.error(error);
+        mensaje.style.color = "red";
+        mensaje.textContent = "Error de conexión con el servidor.";
+    } finally {
+        if (!mensaje.innerHTML.includes("exitosa")) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fas fa-check-circle"></i> Inscribirme al Evento`;
+        }
+    }
+}
+
+/* =========================================================
+   Sergio Rodriguez - Fin
+   ========================================================= */
