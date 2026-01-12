@@ -140,6 +140,16 @@ async function cargarEventos() {
                     <div class="info-item">
                         <i class="fas fa-users"></i> ${evento.cupos} Cupos
                     </div>
+                    <div style="margin-top: 1.2rem; text-align: center; border-top: 1px dashed var(--border); padding-top: 1rem;">
+                        <a href="editar.html?id=${evento.id}" style="color: var(--accent); text-decoration: none; font-weight: 600;">
+                            <i class="fas fa-edit"></i> Editar Evento
+                        </a>
+                    </div>
+                    <div style="margin-top: 1.2rem; text-align: center; border-top: 1px dashed var(--border); padding-top: 1rem;">
+                        <a href="inscritos.html?id=${evento.id}" style="color: var(--accent); text-decoration: none; font-weight: 600;">
+                            <i class="fas fa-users"></i> Ver Inscritos
+                        </a>
+                    </div>
                 </div>
             `;
 
@@ -160,3 +170,182 @@ if (contenedorEventos) {
    Angie Alfonso - Fin
    ========================================================= */
 
+/* =========================================================
+   Bryan Zhang - Comienzo
+   ========================================================= */
+const formEditorEvento = document.getElementById("formEditarEvento");
+console.log(formEditorEvento);
+
+if (formEditorEvento) {
+    (async () => {
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventoId = urlParams.get("id");
+            if (eventoId) {
+                await cargarevento(eventoId);
+            } else {
+                console.warn("No se encontró el ID del evento en la URL.");
+            }
+        } catch (error) {
+            console.error("Error al inicializar la carga del evento:", error);
+        }
+        initVistaPrevia();
+        const inputTitulo = document.getElementById("titulo");
+        if (inputTitulo) {
+            inputTitulo.dispatchEvent(new Event('input'));
+        }
+    })();
+    formEditorEvento.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("btnEditar");
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Editando...`;
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventoId = urlParams.get("id");
+        const datos = {
+            titulo: document.getElementById("titulo").value,
+            descripcion: document.getElementById("descripcion").value,
+            fecha: document.getElementById("fecha").value,
+            cupos: parseInt(document.getElementById("cupos").value),
+            ubicacion: document.getElementById("ubicacion").value
+        };
+        try {
+            const res = await fetch(`${API_BASE_URL}/eventos/${eventoId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(datos)
+            });
+            if (res.ok) {
+                document.getElementById("mensaje").innerHTML =
+                    `<span style="color:var(--accent)">¡Evento editado con éxito!</span>`;
+                setTimeout(() => {
+                    window.location.href = "eventos.html";
+                }, 1500);
+            }
+        } catch (error) {
+            document.getElementById("mensaje").textContent =
+                "Error de conexión con el servidor.";
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fas fa-paper-plane"></i> Confirmar Edición`;
+        }
+    });
+}
+
+async function cargarevento(id) {
+    try {
+        const res = await fetch(`${API_BASE_URL}/eventos/${id}`);
+        
+        if (!res.ok) {
+            throw new Error(`Error HTTP: ${res.status}`);
+        }
+
+        const evento = await res.json();
+
+        const ids = ["titulo", "descripcion", "fecha", "cupos", "ubicacion"];
+
+        ids.forEach(key => {
+            const element = document.getElementById(key);
+            if (element) {
+                const valor = evento[key] || "";
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT') {
+                    element.value = valor;
+                } else {
+                    element.textContent = valor; 
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
+}
+
+/* =========================================================
+   Ventana de inscritos al evento
+   ========================================================= */
+const contenedorInscritos = document.getElementById("inscritos");
+
+if(contenedorInscritos){
+    (async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventoId = urlParams.get("id");
+
+    if (eventoId) {
+        await Promise.all([
+            cargarevento(eventoId),
+            cargarInscritos(eventoId)
+        ]);
+    } else {
+        console.warn("No hay ID en la URL");
+        const titulo = document.getElementById("titulo-evento");
+        if(titulo) titulo.textContent = "Seleccione un evento para ver detalles";
+        
+        const loader = document.getElementById("loader");
+        if(loader) loader.style.display = "none";
+    }
+})();
+}
+
+async function cargarInscritos(eventoId) {
+    const contenedor = document.getElementById("inscritos");
+    if (!contenedor) return;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/eventos/${eventoId}/inscritos`);
+        
+        if (!res.ok) throw new Error("Error al obtener inscritos");
+        
+        const inscritos = await res.json();
+
+        // Limpiar el loader
+        contenedor.innerHTML = "";
+
+        if (inscritos.length === 0) {
+            contenedor.innerHTML = `<p class="mensaje-vacio">Aún no hay inscritos en este evento.</p>`;
+            return;
+        }
+
+        // Crear tarjeta por cada inscrito
+        inscritos.forEach(usuario => {
+            const card = document.createElement("div");
+            card.className = "inscrito-card"; // Clase para CSS
+            
+            // Asumiendo que la API devuelve { nombre, email, etc }
+            card.innerHTML = `
+                <div class="inscrito-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="inscrito-info">
+                    <h4>${usuario.nombre || "Usuario"}</h4>
+                    <p>${usuario.email || "Sin correo"}</p>
+                </div>
+            `;
+            
+            contenedor.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error(error);
+        contenedor.innerHTML = `<p class="error-msg">No se pudo cargar la lista de inscritos.</p>`;
+    }
+}
+
+
+/* =========================================================
+   Bryan Zhang - Fin
+   ========================================================= */
+
+/* =========================================================
+   Inscribir a un usuario al evento (Botón)
+   ========================================================= */
+   const btnAgregar = document.getElementById("btn-agregar-inscrito");
+
+if (btnAgregar) {
+    btnAgregar.addEventListener("click", () => {
+        // Aquí iría la lógica para abrir un formulario modal o redirigir a otra página
+        
+        console.log("TODO: Aquí debe ir la lógica para inscribir a alguien.");
+        alert("Funcionalidad en desarrollo: Aquí se abrirá el formulario de inscripción.");
+    });
+}

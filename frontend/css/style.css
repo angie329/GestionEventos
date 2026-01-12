@@ -410,3 +410,63 @@ textarea:focus {
 /* =========================================================
    Angie Alfonso - Fin
    ========================================================= */
+
+/* =========================================================
+   Bryan Zhang - Comienzo
+   ========================================================= */
+.lista-inscritos {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.inscrito-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.inscrito-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.inscrito-avatar i {
+    font-size: 2.5rem;
+    color: #4a90e2;
+}
+
+.inscrito-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.inscrito-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.mensaje-vacio, .error-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   Bryan Zhang - Fin
+   ========================================================= */
+
+   

@@ -1,0 +1,73 @@
+<!-- Angie Alfonso -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio de Eventos | EventPro</title>
+    <link rel="icon" type="image/png" href="assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i> Event<span>Pro</span>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="eventos.html">Explorar</a></li>
+                <li>
+                    <a href="crear.html" class="btn-nav">
+                        Organizar <i class="fas fa-plus-circle"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container content-wrapper">
+
+        <div class="section-header">
+            <span class="hero-tag">EVENTO</span>
+            <h2 id="titulo">Nombre de evento</h2>
+
+             <div><i class ="fas fa-map-marker-alt"> </i> <span id="ubicacion"></span></div>
+             <div><i class ="fas fa-calendar-alt"> </i> <span id="fecha"></span></div>
+             <div><i class ="fas fa-users"> </i> <span id="cupos"> </span></div>
+
+        </div>
+       <hr class="divider"> <div class="inscritos-header-container">
+        <br>            
+            <button id="btn-agregar-inscrito" class="btn-primary">
+                <i class="fas fa-user-plus"></i> Inscribir Persona
+            </button>  <!-- TODO boton para inscribir en evento -->
+        </div>
+
+        <div id="inscritos" class="lista-inscritos">
+            <div id="loader" class="loader-container">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Conectando con la API...</p>
+            </div>
+        </div>
+        
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 EventPro — Gestión de Eventos Académicos.</p>
+
+            <div class="footer-badge">
+                Plataforma en línea:
+                <span class="status-online">● Online</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
