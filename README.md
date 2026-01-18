@@ -1,91 +1,136 @@
-Gestión de Eventos – Backend
+# Plataforma Web para la Gestión y Organización de Eventos
 
-Este proyecto contiene el backend de la plataforma web para la gestión y organización de eventos académicos y comunitarios, desarrollado para la materia Lenguajes de Programación.
+Este proyecto constituye el entregable final de la asignatura **Lenguajes de Programación**. Consiste en un sistema integral para la administración de eventos académicos y comunitarios, basado en una arquitectura desacoplada.
 
-El backend fue implementado utilizando Laravel y expone una API REST para la gestión de eventos.
+El sistema se divide en:
+* **Backend:** API REST desarrollada en el framework **Laravel** para la gestión de lógica de negocio y persistencia de datos.
+* **Frontend:** Aplicación cliente desarrollada en **HTML, CSS y JavaScript** que interactúa con el backend mediante peticiones asíncronas.
 
---------------------------------------------------
-Tecnologías utilizadas
---------------------------------------------------
-- PHP 8.x
-- Laravel
-- MySQL
-- Composer
-- Postman (para pruebas)
 
---------------------------------------------------
-Requisitos previos
---------------------------------------------------
-Antes de ejecutar el proyecto se debe tener instalado:
-- PHP 8.x
-- Composer
-- MySQL
-- Git
+## Tecnologías utilizadas
 
---------------------------------------------------
-Cómo ejecutar el proyecto
---------------------------------------------------
+### Backend
+* **PHP:** 8.5.1
+* **Laravel:** 12.44.0
+* **Base de datos:** MySQL
+* **Gestor de dependencias:** Composer 2.9.2
+* **Herramienta de pruebas:** Postman
 
-# 1. Clonar el repositorio
+### Frontend
+* **HTML5**
+* **CSS3**
+* **JavaScript**
 
+### Control de versiones y herramientas
+* **Git / GitHub**
+* **Servidor local:** XAMPP, Laragon o similar
+
+---
+
+## Requisitos previos
+
+Antes de ejecutar el proyecto, es necesario tener instalado:
+* PHP 8.5.1 o superior
+* Composer 2.x
+* MySQL
+* Git
+* Navegador web moderno (Chrome, Edge, Firefox)
+
+---
+
+## Estructura del proyecto
+
+```text
+GestionEventos/
+├── backend/            # Lógica del servidor y API
+│   ├── app/
+│   ├── routes/
+│   ├── database/
+│   ├── config/
+│   ├── resources/
+│   ├── public/
+│   ├── .env.example
+│   ├── composer.json
+│   └── artisan
+│
+├── frontend/           # Interfaz de usuario y lógica cliente
+│   ├── css/
+│   ├── js/
+│   ├── assets/
+│   ├── index.html
+│   ├── eventos.html
+│   ├── detalle.html
+│   ├── crear.html
+│   ├── editar.html
+│   └── inscritos.html
+│
+└── README.md
+```
+
+
+## Instrucciones para ejecutar el Backend
+
+### 1. Clonar el repositorio
+```bash
 git clone https://github.com/angie329/GestionEventos
 cd GestionEventos/backend
-
-# 2. Instalar dependencias
-
+```
+### 2. Instalar dependencias del backend
+```bash
 composer install
+```
 
-# 3. Configurar el archivo .env
-
+### 3. Configurar el archivo de entorno
 Copiar el archivo de ejemplo:
-cp .env.example .env
 
-Configurar la base de datos:
+```bash
+cp .env.example .env
+```
+Configurar los datos de la base de datos en el archivo .env:
+```bash
 DB_DATABASE=eventos
 DB_USERNAME=root
 DB_PASSWORD=
-
-# 4. Generar la clave de la aplicación
-
+```
+### 4. Generar la clave de la aplicación
+```bash
 php artisan key:generate
-
-# 5. Ejecutar migraciones
-
+```
+### 5. Ejecutar las migraciones
+```bash
 php artisan migrate
-
-# 6. Levantar el servidor
-
+```
+### 6. Levantar el servidor del backend
+```bash
 php artisan serve
+```
 
-El backend estará disponible en:
-http://127.0.0.1:8000
+El backend estará disponible en: http://127.0.0.1:8000
 
---------------------------------------------------
-Endpoints implementados (Avance 1)
---------------------------------------------------
+## Instrucciones para ejecutar el Frontend
+Ingresar a la carpeta del frontend:
 
-Crear evento
-POST /api/eventos
+```bash
+cd ../frontend
+```
+Abrir el archivo index.html en un navegador web.
 
-Listar eventos
-GET /api/eventos
+## Endpoints implementados
+| Funcionalidad           | Método | Endpoint                       |
+|-------------------------|--------|--------------------------------|
+| Crear evento            | POST   | `/api/eventos`                 |
+| Listar eventos          | GET    | `/api/eventos`                 |
+| Ver detalle del evento  | GET    | `/api/eventos/{id}`            |
+| Editar evento           | PUT    | `/api/eventos/{id}`            |
+| Listar inscritos        | GET    | `/api/eventos/{id}/inscritos`  |
 
-Listar inscritos de eventos
-GET /api/eventos/{id}/inscritos
 
-Editar evento
-PUT /api/eventos/{id}
+## Integrantes del grupo
 
-Los endpoints pueden ser probados utilizando Postman.
+- Angie Alfonso Molina  
+- Sergio Rodríguez Pineda  
+- Bryan Zhang Plaza  
 
---------------------------------------------------
-Integrantes del grupo
---------------------------------------------------
-- Angie Alfonso
-- Sergio Rodriguez
-- Bryan Zhang
+## Repositorio del proyecto
 
---------------------------------------------------
-Notas
---------------------------------------------------
-El proyecto se encuentra en desarrollo y algunas funcionalidades pueden estar pendientes.
+https://github.com/angie329/GestionEventos
